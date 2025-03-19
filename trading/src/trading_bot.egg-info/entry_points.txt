@@ -1,0 +1,3 @@
+[console_scripts]
+trading-backtest = trading.backtest:main
+trading-bot = trading.main:main

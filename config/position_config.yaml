@@ -1,0 +1,159 @@
+# Configuration des positions
+version: '1.0'
+
+# Configuration globale des positions
+default:
+  # Taille maximale de position en pourcentage du capital
+  max_position_size: 0.1  # 10% du capital
+  # Nombre maximum de positions simultanées
+  max_positions: 5
+  # Effet de levier maximum
+  max_leverage: 10
+  # Type de marge par défaut
+  margin_type: 'CROSSED'  # CROSSED ou ISOLATED
+
+# Configuration des entrées en position
+entries:
+  # Délai minimum entre deux entrées (en secondes)
+  min_entry_interval: 300
+  # Pourcentage minimum de volume pour entrer
+  min_volume_threshold: 0.1
+  # Vérification de la tendance
+  trend_check:
+    enabled: true
+    period: 20
+    min_trend_strength: 0.6
+
+# Configuration des sorties de position
+exits:
+  # Sorties basées sur les indicateurs techniques
+  technical:
+    rsi:
+      enabled: true
+      period: 14
+      overbought: 70
+      oversold: 30
+      exit_threshold: 5  # Distance du niveau pour sortir
+    macd:
+      enabled: true
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+      exit_on_cross: true
+    bollinger:
+      enabled: true
+      period: 20
+      std_dev: 2
+      exit_on_touch: true
+  
+  # Sorties basées sur le temps
+  time_based:
+    max_holding_time: 86400  # 24 heures en secondes
+    market_hours_only: true
+    trading_hours:
+      start: '09:30'
+      end: '16:00'
+    timezone: 'UTC'
+
+  # Sorties basées sur le profit/perte
+  pnl:
+    take_profit:
+      enabled: true
+      threshold: 0.02  # 2%
+      trailing: true
+      activation_threshold: 0.01  # 1%
+      callback_rate: 0.005  # 0.5%
+    stop_loss:
+      enabled: true
+      threshold: 0.01  # 1%
+      trailing: true
+      activation_threshold: 0.005  # 0.5%
+      callback_rate: 0.002  # 0.2%
+
+# Configuration spécifique par symbole
+symbols:
+  BTC/USDT:
+    max_position_size: 0.15  # 15% du capital
+    max_leverage: 20
+    entries:
+      min_volume_threshold: 0.2
+    exits:
+      technical:
+        rsi:
+          overbought: 75
+          oversold: 25
+      pnl:
+        take_profit:
+          threshold: 0.03  # 3%
+        stop_loss:
+          threshold: 0.015  # 1.5%
+  
+  ETH/USDT:
+    max_position_size: 0.12  # 12% du capital
+    max_leverage: 15
+    exits:
+      technical:
+        macd:
+          fast_period: 8
+          slow_period: 21
+      pnl:
+        take_profit:
+          threshold: 0.025  # 2.5%
+        stop_loss:
+          threshold: 0.012  # 1.2%
+
+# Configuration des ajustements de position
+adjustments:
+  # Ajustement basé sur la volatilité
+  volatility_based:
+    enabled: true
+    lookback_period: 20
+    threshold: 0.02  # 2%
+    reduction_factor: 0.5
+  
+  # Ajustement basé sur le volume
+  volume_based:
+    enabled: true
+    lookback_period: 10
+    threshold: 2.0  # 2x le volume moyen
+    increase_factor: 1.2
+
+  # Ajustement basé sur la tendance
+  trend_based:
+    enabled: true
+    ma_period: 50
+    increase_above_ma: true
+    decrease_below_ma: true
+    adjustment_factor: 0.2
+
+# Configuration des validations de position
+validations:
+  # Vérification de la liquidité
+  check_liquidity: true
+  min_liquidity_ratio: 10.0
+  
+  # Vérification de la corrélation
+  check_correlation: true
+  max_correlation: 0.8
+  correlation_lookback: 30
+  
+  # Vérification du spread
+  check_spread: true
+  max_spread_percent: 0.5
+
+# Configuration des notifications de position
+notifications:
+  # Notification à l'ouverture de position
+  on_open: true
+  # Notification à la fermeture de position
+  on_close: true
+  # Notification lors des ajustements
+  on_adjust: true
+  # Notification en cas de sortie forcée
+  on_force_exit: true
+  # Canaux de notification
+  channels:
+    - console
+    - log
+    # - telegram  # Décommentez pour activer les notifications Telegram
+    # - email     # Décommentez pour activer les notifications par email

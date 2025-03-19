@@ -1,0 +1,27 @@
+Metadata-Version: 2.2
+Name: trading-bot
+Version: 1.0.0
+Summary: Advanced Trading Bot with ML capabilities
+Author: Your Name
+Requires-Python: >=3.8
+Requires-Dist: numpy>=1.19.0
+Requires-Dist: pandas>=1.2.0
+Requires-Dist: scikit-learn>=0.24.0
+Requires-Dist: tensorflow>=2.4.0
+Requires-Dist: ccxt>=1.50.0
+Requires-Dist: ta>=0.7.0
+Requires-Dist: streamlit>=0.85.0
+Requires-Dist: plotly>=4.14.0
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0.0; extra == "dev"
+Requires-Dist: black>=21.0.0; extra == "dev"
+Requires-Dist: flake8>=3.9.0; extra == "dev"
+Requires-Dist: mypy>=0.900; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx>=4.0.0; extra == "docs"
+Requires-Dist: sphinx-rtd-theme>=0.5.0; extra == "docs"
+Dynamic: author
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary

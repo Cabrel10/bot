@@ -1,0 +1,150 @@
+# Configuration des ordres
+version: '1.0'
+
+# Configuration globale des ordres
+default:
+  # Taille minimale d'ordre en USDT
+  min_order_size: 10.0
+  # Taille maximale d'ordre en USDT
+  max_order_size: 1000.0
+  # Nombre maximum d'ordres ouverts simultanément
+  max_open_orders: 10
+  # Délai d'expiration des ordres en secondes (0 = pas d'expiration)
+  order_timeout: 300
+  # Nombre de tentatives de placement d'ordre
+  max_retries: 3
+  # Délai entre les tentatives en secondes
+  retry_delay: 1
+  time_in_force: GTC  # Good Till Cancel
+  post_only: false
+  reduce_only: false
+  leverage_type: isolated  # isolated ou cross
+  default_leverage: 1
+
+# Configuration des types d'ordres
+order_types:
+  market:
+    enabled: true
+    # Slippage maximum autorisé en pourcentage
+    max_slippage: 0.1
+  limit:
+    enabled: true
+    # Post-only par défaut
+    post_only: true
+    # Temps avant annulation automatique (en secondes, 0 = désactivé)
+    time_in_force: 0
+  stop_loss:
+    enabled: true
+    # Trailing stop en pourcentage
+    trailing_stop: false
+    trailing_stop_percent: 1.0
+  take_profit:
+    enabled: true
+  oco:
+    enabled: true
+    # Delta de prix pour le déclenchement en pourcentage
+    trigger_price_delta: 0.5
+
+# Configuration des frais par exchange
+transaction_fees:
+  binance:
+    maker: 0.001  # 0.1%
+    taker: 0.001  # 0.1%
+    futures_maker: 0.0002  # 0.02%
+    futures_taker: 0.0004  # 0.04%
+    default_fee: 0.001
+    symbols:
+      BTC/USDT:
+        maker: 0.0008
+        taker: 0.0008
+      ETH/USDT:
+        maker: 0.0008
+        taker: 0.0008
+  bitget:
+    maker: 0.001  # 0.1%
+    taker: 0.001  # 0.1%
+    futures_maker: 0.0002  # 0.02%
+    futures_taker: 0.0004  # 0.04%
+
+# Configuration par symbole
+symbols:
+  BTC/USDT:
+    min_order_size: 20.0
+    max_order_size: 2000.0
+    price_precision: 2
+    quantity_precision: 6
+    min_notional: 10.0
+    max_leverage: 20
+    order_types:
+      - market
+      - limit
+      - stop_loss
+      - take_profit
+      - oco
+    default_leverage: 5
+    min_quantity: 0.0001
+    max_quantity: 10.0
+  ETH/USDT:
+    min_order_size: 15.0
+    max_order_size: 1500.0
+    price_precision: 2
+    quantity_precision: 5
+    min_notional: 10.0
+    max_leverage: 20
+    order_types:
+      - market
+      - limit
+      - stop_loss
+      - take_profit
+    default_leverage: 3
+    min_quantity: 0.001
+    max_quantity: 100.0
+
+# Configuration des validations
+validations:
+  # Vérification du solde disponible
+  check_balance: true
+  # Vérification des limites de l'exchange
+  check_exchange_limits: true
+  # Vérification du prix par rapport au carnet d'ordres
+  check_orderbook: true
+  # Pourcentage maximum d'écart par rapport au prix du marché
+  max_price_deviation: 5.0
+  price:
+    max_deviation: 0.05  # 5% de déviation max du prix moyen
+    reference_period: 5m  # Période pour le calcul du prix moyen
+  quantity:
+    max_position_value: 10000  # Valeur maximale d'une position en USDT
+    max_order_value: 1000  # Valeur maximale d'un ordre en USDT
+  risk:
+    max_leverage: 20
+    max_open_orders: 10
+    max_daily_orders: 100
+    max_position_count: 5
+
+# Configuration des retry en cas d'erreur
+retry:
+  max_attempts: 3
+  delay: 1.0  # secondes
+  backoff_factor: 2.0
+  errors:
+    - ConnectionError
+    - TimeoutError
+    - RateLimitError
+
+# Configuration des notifications d'ordre
+notifications:
+  # Notification à la création d'ordre
+  on_create: true
+  # Notification à l'exécution d'ordre
+  on_fill: true
+  # Notification à l'annulation d'ordre
+  on_cancel: true
+  # Notification en cas d'erreur
+  on_error: true
+  # Canaux de notification
+  channels:
+    - console
+    - log
+    # - telegram  # Décommentez pour activer les notifications Telegram
+    # - email     # Décommentez pour activer les notifications par email 

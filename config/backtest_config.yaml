@@ -1,0 +1,12 @@
+commission: 0.21000000000000008
+initial_capital: 100.0
+last_backtest: results/backtests/backtest_multi_20250316_015618.yaml
+leverage: 1
+max_positions: 4
+position_size: 38.0
+slippage: 0.1
+stop_loss: 4.999999999999998
+take_profit: 4.9999999999999964
+trailing_stop: true
+trailing_stop_distance: 1.0
+use_leverage: true

@@ -1,0 +1,29 @@
+# Image de base Python pour tous les services
+FROM python:3.9-slim
+
+# Configuration de l'environnement
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_INDEX_URL="https://mirrors.aliyun.com/pypi/simple/" \
+    PIP_TRUSTED_HOST="mirrors.aliyun.com" \
+    DEBIAN_FRONTEND=noninteractive
+
+# Installation des dépendances système communes
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Mise à jour de pip avec configuration robuste
+COPY requirements/base_windows.txt /tmp/requirements/
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir setuptools wheel && \
+    pip install --no-cache-dir -r /tmp/requirements/base_windows.txt && \
+    rm -rf /root/.cache/pip/*
+
+WORKDIR /app

@@ -1,0 +1,17 @@
+# Service de monitoring
+FROM trading-base-python:latest
+
+# Installation des dépendances de monitoring
+RUN pip install --no-cache-dir \
+    prometheus-client==0.14.1 \
+    psutil==5.9.0 \
+    requests==2.26.0
+
+# Copie du code source
+COPY trading/services/monitoring /app/trading/services/monitoring
+COPY trading/utils /app/trading/utils
+
+# Configuration Prometheus
+EXPOSE 9090
+
+CMD ["python", "-m", "trading.services.monitoring.metrics_collector"]

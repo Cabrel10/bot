@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord | MORNINGSTAR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Chart.js pour les visualisations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- ApexCharts pour des graphiques avancés -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body class="dashboard-page">
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>MORNING<span>STAR</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="contribute.html">Contribuer</a></li>
+                    <li><a href="invest.html">Investir</a></li>
+                    <li><a href="dashboard.html" class="active">Tableau de Bord</a></li>
+                </ul>
+            </nav>
+            <div class="wallet-connect">
+                <button id="connectWallet" class="btn-connect">Connecter Wallet</button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span id="walletAddress">Non connecté</span>
+                    <div class="network-status" id="networkStatus"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <nav class="dashboard-nav">
+                <ul>
+                    <li class="active"><a href="#overview"><span class="icon">📊</span> Vue d'ensemble</a></li>
+                    <li><a href="#portfolio"><span class="icon">💼</span> Mon portfolio</a></li>
+                    <li><a href="#trading"><span class="icon">📈</span> Performance trading</a></li>
+                    <li><a href="#staking"><span class="icon">🔒</span> Staking</a></li>
+                    <li><a href="#governance"><span class="icon">🗳️</span> Gouvernance</a></li>
+                    <li><a href="#rewards"><span class="icon">🏆</span> Récompenses</a></li>
+                    <li><a href="#settings"><span class="icon">⚙️</span> Paramètres</a></li>
+                </ul>
+            </nav>
+            <div class="user-status">
+                <div class="user-tier">
+                    <span class="tier-badge premium">Premium</span>
+                </div>
+                <div class="user-balance">
+                    <h4>Mon solde</h4>
+                    <p class="token-balance"><span id="userTokens">45,750</span> MSTN</p>
+                    <p class="token-value"><span id="tokenValue">22,875</span> USD</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-main">
+            <section id="overview" class="dashboard-section active">
+                <div class="section-header">
+                    <h2>Vue d'ensemble</h2>
+                    <div class="date-selector">
+                        <button class="date-btn active">1D</button>
+                        <button class="date-btn">1S</button>
+                        <button class="date-btn">1M</button>
+                        <button class="date-btn">3M</button>
+                        <button class="date-btn">1A</button>
+                        <button class="date-btn">Max</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <h3>Valeur du portfolio</h3>
+                        <p class="stat-value">22,875 USD</p>
+                        <p class="stat-change positive">+5.8% <span class="period">depuis hier</span></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rendement algorithme</h3>
+                        <p class="stat-value">+14.2%</p>
+                        <p class="stat-change positive">+1.2% <span class="period">depuis hier</span></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Revenus cumulés</h3>
+                        <p class="stat-value">4,215 USD</p>
+                        <p class="stat-change positive">+122 USD <span class="period">aujourd'hui</span></p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Prix du token</h3>
+                        <p class="stat-value">0.50 USD</p>
+                        <p class="stat-change positive">+3.2% <span class="period">24h</span></p>
+                    </div>
+                </div>
+
+                <div class="chart-container main-chart">
+                    <h3>Performance des algorithmes</h3>
+                    <div id="performanceChart"></div>
+                </div>
+
+                <div class="recent-activity">
+                    <h3>Activité récente</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon reward">🏆</div>
+                            <div class="activity-details">
+                                <h4>Récompense de staking reçue</h4>
+                                <p>125 MSTN distribués à votre wallet</p>
+                                <span class="activity-time">Aujourd'hui, 14:32</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon trade">📈</div>
+                            <div class="activity-details">
+                                <h4>Transaction algorithmique</h4>
+                                <p>Échange BTC/ETH effectué avec +2.3% de profit</p>
+                                <span class="activity-time">Aujourd'hui, 09:15</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon vote">🗳️</div>
+                            <div class="activity-details">
+                                <h4>Vote de gouvernance</h4>
+                                <p>Vous avez voté pour la proposition #42</p>
+                                <span class="activity-time">Hier, 18:05</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Mon portfolio</h2>
+                </div>
+                <div class="portfolio-composition">
+                    <div class="chart-container">
+                        <h3>Répartition des actifs</h3>
+                        <canvas id="portfolioDistributionChart"></canvas>
+                    </div>
+                    <div class="portfolio-assets">
+                        <h3>Mes actifs</h3>
+                        <div class="asset-list">
+                            <div class="asset-item">
+                                <div class="asset-icon">
+                                    <img src="images/icons/mstn.svg" alt="MSTN">
+                                </div>
+                                <div class="asset-name">MSTN</div>
+                                <div class="asset-amount">45,750</div>
+                                <div class="asset-value">22,875 USD</div>
+                                <div class="asset-change positive">+5.8%</div>
+                            </div>
+                            <div class="asset-item">
+                                <div class="asset-icon">
+                                    <img src="images/icons/btc.svg" alt="BTC">
+                                </div>
+                                <div class="asset-name">BTC (via MSTN)</div>
+                                <div class="asset-amount">0.128</div>
+                                <div class="asset-value">5,862 USD</div>
+                                <div class="asset-change positive">+2.1%</div>
+                            </div>
+                            <div class="asset-item">
+                                <div class="asset-icon">
+                                    <img src="images/icons/eth.svg" alt="ETH">
+                                </div>
+                                <div class="asset-name">ETH (via MSTN)</div>
+                                <div class="asset-amount">2.45</div>
+                                <div class="asset-value">4,378 USD</div>
+                                <div class="asset-change negative">-1.2%</div>
+                            </div>
+                            <div class="asset-item">
+                                <div class="asset-icon">
+                                    <img src="images/icons/other.svg" alt="Autres">
+                                </div>
+                                <div class="asset-name">Autres actifs</div>
+                                <div class="asset-amount">--</div>
+                                <div class="asset-value">12,635 USD</div>
+                                <div class="asset-change positive">+3.5%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="trading" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Performance trading</h2>
+                </div>
+                <div class="trading-stats">
+                    <div class="stat-card">
+                        <h3>Performance mensuelle</h3>
+                        <p class="stat-value">+8.4%</p>
+                        <p class="stat-benchmark">vs. +2.1% BTC/ETH</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Ratio de Sharpe</h3>
+                        <p class="stat-value">2.18</p>
+                        <p class="stat-benchmark">Excellent niveau de risque-rendement</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Max Drawdown</h3>
+                        <p class="stat-value">6.2%</p>
+                        <p class="stat-benchmark">Baisse maximale sur 30 jours</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Transactions par jour</h3>
+                        <p class="stat-value">14.8</p>
+                        <p class="stat-benchmark">+3.2 vs. mois dernier</p>
+                    </div>
+                </div>
+                <div class="chart-container trading-chart">
+                    <h3>Historique des performances</h3>
+                    <div id="tradingHistoryChart"></div>
+                </div>
+                <div class="algo-performance">
+                    <h3>Performance par algorithme</h3>
+                    <div class="algo-list">
+                        <div class="algo-item">
+                            <div class="algo-name">AlphaTrader V3</div>
+                            <div class="algo-performance-bar">
+                                <div class="performance-fill positive" style="width: 75%;">+7.5%</div>
+                            </div>
+                            <div class="algo-allocation">35% allocation</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">MomentumSeeker</div>
+                            <div class="algo-performance-bar">
+                                <div class="performance-fill positive" style="width: 120%;">+12.0%</div>
+                            </div>
+                            <div class="algo-allocation">25% allocation</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">VolatilityHarvester</div>
+                            <div class="algo-performance-bar">
+                                <div class="performance-fill positive" style="width: 56%;">+5.6%</div>
+                            </div>
+                            <div class="algo-allocation">20% allocation</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">TrendSurfer</div>
+                            <div class="algo-performance-bar">
+                                <div class="performance-fill positive" style="width: 93%;">+9.3%</div>
+                            </div>
+                            <div class="algo-allocation">15% allocation</div>
+                        </div>
+                        <div class="algo-item">
+                            <div class="algo-name">ArbitrageHunter</div>
+                            <div class="algo-performance-bar">
+                                <div class="performance-fill positive" style="width: 40%;">+4.0%</div>
+                            </div>
+                            <div class="algo-allocation">5% allocation</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="staking" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Staking</h2>
+                </div>
+                <div class="staking-overview">
+                    <div class="staking-stats">
+                        <div class="stat-card">
+                            <h3>Total staké</h3>
+                            <p class="stat-value">38,500 MSTN</p>
+                            <p class="stat-percentage">84.2% de vos tokens</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Rendement annuel</h3>
+                            <p class="stat-value">12.8% APY</p>
+                            <p class="stat-bonus">+2% bonus niveau Premium</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Période de lock</h3>
+                            <p class="stat-value">90 jours</p>
+                            <p class="stat-time">52 jours restants</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Prochaine récompense</h3>
+                            <p class="stat-value">125 MSTN</p>
+                            <p class="stat-time">Dans 7 jours</p>
+                        </div>
+                    </div>
+                    <div class="staking-actions">
+                        <div class="action-card">
+                            <h3>Staker plus de tokens</h3>
+                            <div class="staking-form">
+                                <input type="number" placeholder="Montant" class="staking-input">
+                                <select class="staking-period">
+                                    <option value="30">30 jours (10% APY)</option>
+                                    <option value="90" selected>90 jours (12.8% APY)</option>
+                                    <option value="180">180 jours (15.2% APY)</option>
+                                    <option value="365">365 jours (18% APY)</option>
+                                </select>
+                                <button class="btn-stake">Staker</button>
+                            </div>
+                        </div><div class="action-card">
+                            <h3>Récompenses cumulées</h3>
+                            <div class="rewards-info">
+                                <p class="accumulated-rewards">Récompenses non réclamées: <span>750 MSTN</span></p>
+                                <button class="btn-claim">Réclamer maintenant</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="staking-history">
+                        <h3>Historique de staking</h3>
+                        <div class="history-list">
+                            <div class="history-item">
+                                <div class="history-date">01/03/2025</div>
+                                <div class="history-action">Staking ajouté</div>
+                                <div class="history-amount">5,000 MSTN</div>
+                                <div class="history-period">90 jours</div>
+                                <div class="history-status">En cours</div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-date">15/02/2025</div>
+                                <div class="history-action">Récompense reçue</div>
+                                <div class="history-amount">125 MSTN</div>
+                                <div class="history-period">-</div>
+                                <div class="history-status">Complété</div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-date">15/01/2025</div>
+                                <div class="history-action">Staking ajouté</div>
+                                <div class="history-amount">33,500 MSTN</div>
+                                <div class="history-period">90 jours</div>
+                                <div class="history-status">En cours</div>
+                            </div>
+                            <div class="history-item">
+                                <div class="history-date">10/12/2024</div>
+                                <div class="history-action">Retrait</div>
+                                <div class="history-amount">10,000 MSTN</div>
+                                <div class="history-period">-</div>
+                                <div class="history-status">Complété</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="governance" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Gouvernance</h2>
+                </div>
+                <div class="governance-stats">
+                    <div class="stat-card">
+                        <h3>Pouvoir de vote</h3>
+                        <p class="stat-value">38,500 votes</p>
+                        <p class="stat-info">Basé sur vos tokens stakés</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Propositions actives</h3>
+                        <p class="stat-value">4</p>
+                        <p class="stat-info">2 nécessitent votre vote</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Participation</h3>
+                        <p class="stat-value">82%</p>
+                        <p class="stat-info">Taux de participation personnelle</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Votre influence</h3>
+                        <p class="stat-value">0.42%</p>
+                        <p class="stat-info">Du pouvoir de vote total</p>
+                    </div>
+                </div>
+                <div class="active-proposals">
+                    <h3>Propositions actives</h3>
+                    <div class="proposal-list">
+                        <div class="proposal-item">
+                            <div class="proposal-id">#45</div>
+                            <div class="proposal-title">Ajouter l'algorithme "DeFi Yield Optimizer" à la plateforme</div>
+                            <div class="proposal-status">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 68%;">68%</div>
+                                </div>
+                                <div class="approval-needed">Seuil: 75%</div>
+                            </div>
+                            <div class="proposal-time">Expire dans 3 jours</div>
+                            <div class="proposal-actions">
+                                <button class="btn-vote-for">Pour</button>
+                                <button class="btn-vote-against">Contre</button>
+                            </div>
+                        </div>
+                        <div class="proposal-item">
+                            <div class="proposal-id">#44</div>
+                            <div class="proposal-title">Augmenter les récompenses de staking de 2% pour tous les utilisateurs</div>
+                            <div class="proposal-status">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 42%;">42%</div>
+                                </div>
+                                <div class="approval-needed">Seuil: 75%</div>
+                            </div>
+                            <div class="proposal-time">Expire dans 5 jours</div>
+                            <div class="proposal-actions">
+                                <button class="btn-vote-for">Pour</button>
+                                <button class="btn-vote-against">Contre</button>
+                            </div>
+                        </div>
+                        <div class="proposal-item voted">
+                            <div class="proposal-id">#43</div>
+                            <div class="proposal-title">Ajouter le support pour Solana dans les algorithmes de trading</div>
+                            <div class="proposal-status">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 87%;">87%</div>
+                                </div>
+                                <div class="approval-needed">Seuil: 75%</div>
+                            </div>
+                            <div class="proposal-time">Expire dans 2 jours</div>
+                            <div class="proposal-actions">
+                                <div class="voted-label">Voté: Pour</div>
+                            </div>
+                        </div>
+                        <div class="proposal-item voted">
+                            <div class="proposal-id">#42</div>
+                            <div class="proposal-title">Mise à jour de la trésorerie: allouer 2% pour le développement communautaire</div>
+                            <div class="proposal-status">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 91%;">91%</div>
+                                </div>
+                                <div class="approval-needed">Seuil: 75%</div>
+                            </div>
+                            <div class="proposal-time">Expire dans 1 jour</div>
+                            <div class="proposal-actions">
+                                <div class="voted-label">Voté: Pour</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-proposal">
+                    <h3>Créer une proposition</h3>
+                    <p class="proposal-requirement">Nécessite minimum 10,000 MSTN stakés pendant 30 jours</p>
+                    <button class="btn-create-proposal">Soumettre une nouvelle proposition</button>
+                </div>
+            </section>
+
+            <section id="rewards" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Récompenses</h2>
+                </div>
+                <div class="rewards-overview">
+                    <div class="rewards-stats">
+                        <div class="stat-card">
+                            <h3>Récompenses totales</h3>
+                            <p class="stat-value">4,125 MSTN</p>
+                            <p class="stat-info">Depuis votre inscription</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Ce mois-ci</h3>
+                            <p class="stat-value">385 MSTN</p>
+                            <p class="stat-info">+12% vs. mois dernier</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Points de fidélité</h3>
+                            <p class="stat-value">12,850</p>
+                            <p class="stat-info">150 points jusqu'au niveau Élite</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Bonus référence</h3>
+                            <p class="stat-value">325 MSTN</p>
+                            <p class="stat-info">5 utilisateurs référés</p>
+                        </div>
+                    </div>
+                    <div class="rewards-breakdown">
+                        <h3>Répartition des récompenses</h3>
+                        <canvas id="rewardsBreakdownChart"></canvas>
+                    </div>
+                </div>
+                <div class="loyalty-program">
+                    <h3>Programme de fidélité</h3>
+                    <div class="loyalty-progress">
+                        <div class="loyalty-levels">
+                            <div class="loyalty-level passed">
+                                <div class="level-icon">🥉</div>
+                                <div class="level-name">Bronze</div>
+                                <div class="level-points">2,500 pts</div>
+                            </div>
+                            <div class="loyalty-level passed">
+                                <div class="level-icon">🥈</div>
+                                <div class="level-name">Argent</div>
+                                <div class="level-points">5,000 pts</div>
+                            </div>
+                            <div class="loyalty-level passed">
+                                <div class="level-icon">🥇</div>
+                                <div class="level-name">Or</div>
+                                <div class="level-points">10,000 pts</div>
+                            </div>
+                            <div class="loyalty-level current">
+                                <div class="level-icon">💎</div>
+                                <div class="level-name">Premium</div>
+                                <div class="level-points">12,850/13,000 pts</div>
+                            </div>
+                            <div class="loyalty-level">
+                                <div class="level-icon">👑</div>
+                                <div class="level-name">Élite</div>
+                                <div class="level-points">13,000 pts</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 98.8%;">98.8%</div>
+                        </div>
+                    </div>
+                    <div class="level-benefits">
+                        <h4>Avantages du niveau Premium</h4>
+                        <ul class="benefits-list">
+                            <li>+2% APY sur le staking</li>
+                            <li>Frais de trading réduits à 0.15%</li>
+                            <li>Accès à tous les algorithmes</li>
+                            <li>Participation prioritaire aux nouveaux pools</li>
+                            <li>Support dédié 24/7</li>
+                        </ul>
+                        <h4>Débloquez au niveau Élite</h4>
+                        <ul class="benefits-list locked">
+                            <li>+3.5% APY sur le staking</li>
+                            <li>Frais de trading à 0.10%</li>
+                            <li>Accès anticipé aux nouveaux algorithmes</li>
+                            <li>Allocation garantie dans les pools limités</li>
+                            <li>Gestionnaire de compte personnel</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="referral-program">
+                    <h3>Programme de parrainage</h3>
+                    <div class="referral-info">
+                        <p class="referral-link">Votre lien de parrainage: <span>morningstar.finance/ref/user42689</span> <button class="btn-copy">Copier</button></p>
+                        <p class="referral-reward">Gagnez 50 MSTN pour chaque nouvel utilisateur qui s'inscrit et stake au moins 1,000 MSTN</p>
+                    </div>
+                    <div class="referral-stats">
+                        <div class="stat-mini">
+                            <h4>Utilisateurs parrainés</h4>
+                            <p>5</p>
+                        </div>
+                        <div class="stat-mini">
+                            <h4>En attente</h4>
+                            <p>2</p>
+                        </div>
+                        <div class="stat-mini">
+                            <h4>Récompenses gagnées</h4>
+                            <p>325 MSTN</p>
+                        </div>
+                        <div class="stat-mini">
+                            <h4>Potentiel en attente</h4>
+                            <p>100 MSTN</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Paramètres</h2>
+                </div>
+                <div class="settings-container">
+                    <div class="settings-sidebar">
+                        <ul class="settings-nav">
+                            <li class="active"><a href="#profile-settings">Profil</a></li>
+                            <li><a href="#security-settings">Sécurité</a></li>
+                            <li><a href="#notifications-settings">Notifications</a></li>
+                            <li><a href="#trading-settings">Trading</a></li>
+                            <li><a href="#api-settings">API</a></li>
+                        </ul>
+                    </div>
+                    <div class="settings-content">
+                        <div id="profile-settings" class="settings-panel active">
+                            <h3>Paramètres du profil</h3>
+                            <form class="settings-form">
+                                <div class="form-group">
+                                    <label for="display-name">Nom d'affichage</label>
+                                    <input type="text" id="display-name" value="CryptoTrader42">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" value="trader@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="timezone">Fuseau horaire</label>
+                                    <select id="timezone">
+                                        <option value="utc">UTC</option>
+                                        <option value="utc+1" selected>UTC+1 (Paris, Berlin)</option>
+                                        <option value="utc+2">UTC+2 (Helsinki, Kiev)</option>
+                                        <option value="utc-5">UTC-5 (New York, Toronto)</option>
+                                        <option value="utc-8">UTC-8 (Los Angeles, Seattle)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">

@@ -1,0 +1,418 @@
+# Configuration du téléchargement et de la validation des données
+data:
+  download:
+    exchange:
+      name: "binance"
+      rate_limit: 1200  # Requêtes par minute
+      timeout: 30000   # Timeout en millisecondes
+      retry_attempts: 3
+      retry_delay: 5000  # 5 seconds delay between retries
+
+    pairs:
+      - symbol: "BTC/USDT"
+        timeframes: ["1m", "5m", "15m", "1h", "4h", "1d"]
+        min_history: "6 months"
+      - symbol: "ETH/USDT"
+        timeframes: ["1m", "5m", "15m", "1h", "4h", "1d"]
+        min_history: "6 months"
+
+  preprocessing:
+    validation:
+      check_missing_data: true
+      max_missing_ratio: 0.01
+      check_outliers: true
+      outlier_std_threshold: 3.0
+      min_data_points: 1000
+      check_volume: true
+      min_volume_threshold: 1000
+
+    cleaning:
+      interpolation_method: "linear"
+      outlier_treatment: "clip"
+      remove_duplicates: true
+      fill_gaps: true
+      smoothing_window: 3
+
+    normalization:
+      price_data:
+        method: "min_max"
+        feature_range: [-1, 1]
+        rolling_window: 100
+      volume_data:
+        method: "log"
+        add_constant: 1
+
+    feature_engineering:
+      technical_indicators:
+        - name: "RSI"
+          params:
+            period: 14
+        - name: "MACD"
+          params:
+            fast_period: 12
+            slow_period: 26
+            signal_period: 9
+        - name: "Bollinger Bands"
+          params:
+            period: 20
+            std_dev: 2
+        - name: "ATR"
+          params:
+            period: 14
+        - name: "OBV"
+          params: {}
+
+      custom_features:
+        price_momentum: true
+        volume_profile: true
+        volatility_metrics: true
+        support_resistance: true
+
+  # Configuration de la préparation des données pour l'entraînement
+  training_data:
+    # Structure des données d'entrée
+    sequence_length: 60  # Taille de la fenêtre temporelle
+    target_type: "returns"  # Type de prédiction: returns ou direction
+    prediction_horizon: 1  # Horizon de prédiction (en périodes)
+
+    # Séparation des données
+    split_ratios:
+      train: 0.7
+      validation: 0.15
+      test: 0.15
+
+    # Augmentation des données
+    augmentation:
+      enabled: true
+      methods:
+        - name: "time_warp"
+          probability: 0.3
+        - name: "jittering"
+          probability: 0.3
+        - name: "scaling"
+          probability: 0.3
+
+  # Stockage et cache des données
+  storage:
+    format: "parquet"  # Format de stockage optimisé
+    compression: "snappy"
+    cache_enabled: true
+    cache_expiry: 3600  # Durée de validité du cache en secondes
+
+# Data configuration
+
+# Data sources
+sources:
+  - name: binance
+    type: "exchange"
+    enabled: true
+    priority: 1
+    timeframes:
+      - 1m
+      - 5m
+      - 15m
+      - 1h
+      - 4h
+      - 1d
+    symbols:
+      - BTC/USDT
+      - ETH/USDT
+      - BNB/USDT
+      - XRP/USDT
+
+  - name: coingecko
+    type: "api"
+    enabled: true
+    priority: 2
+    api_key: ${COINGECKO_API_KEY}
+    timeframes:
+      - 1h
+      - 1d
+    symbols:
+      - BTC/USDT
+      - ETH/USDT
+      - BNB/USDT
+      - XRP/USDT
+
+# Data storage
+storage:
+  type: "sqlite"  # Options: sqlite, postgres, mongodb
+  path: "data/trading.db"
+  backup:
+    enabled: true
+    interval: 86400  # 24 hours
+    max_backups: 7
+  cache:
+    enabled: true
+    max_size: 1073741824  # 1GB
+    expiry: 3600  # 1 hour
+
+# Data cleaning
+cleaning:
+  enabled: true
+  remove_outliers: true
+  fill_missing: true
+  outlier_std_threshold: 3.0
+  min_data_points: 1000
+  max_gap: 3600  # 1 hour
+  interpolation_method: "linear"
+
+# Data validation
+validation:
+  enabled: true
+  price_deviation_threshold: 0.1  # 10%
+  volume_deviation_threshold: 0.5  # 50%
+  timestamp_continuity: true
+  min_volume: 1000  # USDT
+  min_trades: 100
+
+# Data processing
+processing:
+  resampling:
+    enabled: true
+    method: "ohlcv"
+    timeframes:
+      - 1m
+      - 5m
+      - 15m
+      - 1h
+      - 4h
+      - 1d
+  indicators:
+    enabled: true
+    types:
+      - "technical"
+      - "volume"
+      - "volatility"
+      - "momentum"
+    parameters:
+      sma: [10, 20, 50, 200]
+      ema: [10, 20, 50, 200]
+      rsi: [14]
+      macd: [12, 26, 9]
+      bollinger: [20, 2]
+
+# Data export
+export:
+  enabled: true
+  format: "csv"
+  compression: true
+  path: "data/exports"
+  frequency: "daily"
+  include_indicators: true
+  include_metadata: true
+
+# Data monitoring
+monitoring:
+  enabled: true
+  metrics:
+    - "data_quality"
+    - "completeness"
+    - "latency"
+    - "accuracy"
+  alerts:
+    - type: "email"
+      recipients:
+        - "admin@example.com"
+      conditions:
+        - metric: "data_quality"
+          threshold: 0.95
+          operator: "<"
+        - metric: "latency"
+          threshold: 300
+          operator: ">"
+
+# Configuration de la gestion des données
+
+# Configuration des sources de données
+data_sources:
+  exchange:
+    name: "binance"  # binance, coinbase, kraken, etc.
+    api_key: "${EXCHANGE_API_KEY}"
+    api_secret: "${EXCHANGE_API_SECRET}"
+    testnet: false
+    rate_limit: 1200  # requêtes par minute
+    timeout: 30  # secondes
+    retry_attempts: 3
+    retry_delay: 1  # secondes
+
+  market_data:
+    symbols:
+      - "BTC/USDT"
+      - "ETH/USDT"
+      - "BNB/USDT"
+      - "XRP/USDT"
+      - "ADA/USDT"
+    timeframes:
+      - "1m"
+      - "5m"
+      - "15m"
+      - "1h"
+      - "4h"
+      - "1d"
+    start_date: "2023-01-01"
+    end_date: "2024-12-31"
+    update_frequency: 60  # secondes
+    batch_size: 1000
+    max_retries: 3
+    retry_delay: 5  # secondes
+
+  sentiment_data:
+    sources:
+      - type: "twitter"
+        api_key: "${TWITTER_API_KEY}"
+        api_secret: "${TWITTER_API_SECRET}"
+        access_token: "${TWITTER_ACCESS_TOKEN}"
+        access_token_secret: "${TWITTER_ACCESS_TOKEN_SECRET}"
+      - type: "reddit"
+        client_id: "${REDDIT_CLIENT_ID}"
+        client_secret: "${REDDIT_CLIENT_SECRET}"
+        user_agent: "TradingBot/1.0"
+    keywords:
+      - "bitcoin"
+      - "crypto"
+      - "trading"
+      - "blockchain"
+    update_frequency: 300  # 5 minutes
+    max_posts: 100
+    sentiment_threshold: 0.3
+
+  news_data:
+    sources:
+      - type: "newsapi"
+        api_key: "${NEWSAPI_API_KEY}"
+      - type: "cryptocompare"
+        api_key: "${CRYPTOCOMPARE_API_KEY}"
+    categories:
+      - "cryptocurrency"
+      - "blockchain"
+      - "technology"
+      - "finance"
+    update_frequency: 3600  # 1 heure
+    max_articles: 50
+    sentiment_threshold: 0.3
+
+# Configuration du stockage des données
+storage:
+  database:
+    type: "postgresql"  # postgresql, mongodb, sqlite
+    host: "localhost"
+    port: 5432
+    database: "trading_db"
+    user: "${DB_USER}"
+    password: "${DB_PASSWORD}"
+    max_connections: 20
+    connection_timeout: 30  # secondes
+
+  cache:
+    type: "redis"  # redis, memory
+    host: "localhost"
+    port: 6379
+    database: 0
+    password: "${REDIS_PASSWORD}"
+    max_memory: "2gb"
+    ttl: 3600  # secondes
+
+  files:
+    data_dir: "data"
+    historical_dir: "data/historical"
+    realtime_dir: "data/realtime"
+    backup_dir: "data/backup"
+    max_file_size: 104857600  # 100MB
+    max_files: 100
+    compression: true
+
+# Configuration du prétraitement des données
+preprocessing:
+  technical_indicators:
+    enabled: true
+    indicators:
+      - name: "rsi"
+        params:
+          period: 14
+      - name: "macd"
+        params:
+          fast_period: 12
+          slow_period: 26
+          signal_period: 9
+      - name: "bollinger_bands"
+        params:
+          period: 20
+          std_dev: 2
+      - name: "moving_averages"
+        params:
+          sma: [20, 50, 200]
+          ema: [9, 21, 50]
+
+  feature_engineering:
+    enabled: true
+    features:
+      - name: "price_momentum"
+        params:
+          period: 10
+      - name: "volume_momentum"
+        params:
+          period: 10
+      - name: "volatility"
+        params:
+          period: 20
+      - name: "trend_strength"
+        params:
+          period: 14
+
+  data_cleaning:
+    enabled: true
+    methods:
+      - name: "remove_outliers"
+        params:
+          threshold: 3.0
+      - name: "fill_missing"
+        params:
+          method: "ffill"
+      - name: "normalize"
+        params:
+          method: "standard"
+      - name: "scale"
+        params:
+          method: "minmax"
+
+# Configuration de la validation des données
+validation:
+  enabled: true
+  checks:
+    - name: "completeness"
+      threshold: 0.95
+    - name: "consistency"
+      threshold: 0.98
+    - name: "accuracy"
+      threshold: 0.99
+    - name: "timeliness"
+      threshold: 300  # secondes
+  actions:
+    - name: "log_warning"
+      level: "warning"
+    - name: "notify"
+      channels: ["telegram", "email"]
+    - name: "retry"
+      max_attempts: 3
+    - name: "fallback"
+      source: "backup"
+
+# Configuration de la sauvegarde des données
+backup:
+  enabled: true
+  schedule:
+    frequency: "daily"
+    time: "00:00"
+  retention:
+    daily: 7
+    weekly: 4
+    monthly: 12
+  compression: true
+  encryption: true
+  storage:
+    type: "s3"  # s3, local, ftp
+    bucket: "trading-data-backup"
+    region: "us-east-1"
+    access_key: "${AWS_ACCESS_KEY}"
+    secret_key: "${AWS_SECRET_KEY}"

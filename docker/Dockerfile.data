@@ -1,0 +1,15 @@
+# Service de gestion des données
+FROM trading-base-python:latest
+
+# Installation des dépendances spécifiques
+COPY requirements/data.txt /tmp/requirements/
+RUN pip install --no-cache-dir -r /tmp/requirements/data.txt
+
+# Copie du code source
+COPY trading/core/data /app/trading/core/data
+COPY trading/services/data /app/trading/services/data
+COPY trading/utils /app/trading/utils
+
+WORKDIR /app
+
+CMD ["python", "-m", "trading.services.data.data_manager"]

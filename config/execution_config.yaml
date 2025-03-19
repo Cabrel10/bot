@@ -1,0 +1,109 @@
+# Configuration globale du système de trading
+version: '1.0'
+
+# Configuration des plugins
+plugins:
+  enabled:
+    - momentum
+    - ma_cross
+  momentum:
+    rsi:
+      enabled: true
+      period: 14
+      overbought: 70
+      oversold: 30
+    macd:
+      enabled: true
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+    adx:
+      enabled: true
+      period: 14
+      threshold: 25
+
+# Configuration des stratégies
+strategies:
+  enabled:
+    - ma_cross
+  ma_cross:
+    fast_ma: 
+      type: 'EMA'
+      period: 9
+    slow_ma:
+      type: 'EMA'
+      period: 21
+    min_volume: 1000
+
+# Configuration des exchanges
+exchanges:
+  binance:
+    enabled: true
+    testnet: true
+    rate_limits:
+      orders_per_second: 10
+      orders_per_day: 100000
+  bitget:
+    enabled: true
+    testnet: true
+    rate_limits:
+      orders_per_second: 5
+      orders_per_day: 50000
+
+# Configuration des sources de données
+data_source:
+  type: 'live'  # 'live' ou 'csv'
+  csv:
+    directory: 'data/historical'
+    format: 'OHLCV'
+  live:
+    interval: '1m'
+    depth: 100
+
+# Configuration des logs
+logging:
+  level: 'INFO'  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  file:
+    enabled: true
+    path: 'logs/trading.log'
+    max_size: 10485760  # 10 MB
+    backup_count: 5
+  console:
+    enabled: true
+    colored: true
+
+# Configuration des notifications
+notifications:
+  email:
+    enabled: false
+    smtp_server: 'smtp.gmail.com'
+    smtp_port: 587
+    sender: ''
+    recipients: []
+  telegram:
+    enabled: false
+    bot_token: ''
+    chat_id: ''
+
+# Configuration du système
+system:
+  timezone: 'UTC'
+  max_memory_usage: '2GB'
+  cpu_threads: 4
+  heartbeat_interval: 60  # secondes
+  cleanup_interval: 3600  # secondes
+  debug_mode: false
+
+# Configuration des métriques
+metrics:
+  enabled: true
+  prometheus:
+    enabled: true
+    port: 9090
+  influxdb:
+    enabled: false
+    url: http://localhost:8086
+    database: trading_metrics
+    username: ""
+    password: "" 

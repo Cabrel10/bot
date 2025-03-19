@@ -1,0 +1,129 @@
+# Exchange Configuration
+exchanges:
+  binance:
+    api_key: ${BINANCE_API_KEY}
+    api_secret: ${BINANCE_API_SECRET}
+    testnet: false
+    trading_pairs:
+      - BTC/USDT
+      - ETH/USDT
+      - XRP/USDT
+      - DOGE/USDT
+      - SOL/USDT
+      - USDC/USDT
+      - APE/USDT
+      - APT/USDT
+      - BNB/USDT
+      - GALA/USDT
+      - HOOK/USDT
+      - OP/USDT
+      - ADA/USDT
+      - ALICE/USDT
+      - AVAX/USDT
+      - BABYDOGE/USDT
+      - DYDX/USDT
+      - LTC/USDT
+      - LUNC/USDT
+      - SHIB/USDT
+      - TRX/USDT
+      - WOO/USDT
+      - ACH/USDT
+      - ANKR/USDT
+      - ATOM/USDT
+      - BGB/USDT
+      - MATIC/USDT
+      - FTM/USDT
+      - LRC/USDT
+      - FET/USDT
+      - LDO/USDT
+      - OCEAN/USDT
+      - CORE/USDT
+      - MINA/USDT
+      - AGIX/USDT
+      - BLUR/USDT
+      - ZIL/USDT
+      - GMT/USDT
+      - NEAR/USDT
+      - PEOPLE/USDT
+      - BCH/USDT
+      - EOS/USDT
+      - ETC/USDT
+      - FIL/USDT
+      - LINK/USDT
+      - AXS/USDT
+      - DOT/USDT
+      - SUI/USDT
+      - BUSD/USDT
+    timeframes:
+      - 1m
+      - 5m
+      - 15m
+      - 30m
+      - 1h
+      - 4h
+      - 1d
+    rate_limits:
+      requests_per_minute: 1200
+      requests_per_second: 20
+      orders_per_minute: 10
+      max_requests_weight: 5000
+      weight_per_minute: 1200
+      order_count_per_10s: 50
+      order_count_per_day: 200000
+    trading_fees:
+      maker: 0.001
+      taker: 0.001
+    withdrawal_fees:
+      BTC: 0.0005
+      ETH: 0.01
+      USDT: 1.0
+    min_trade_amount:
+      BTC/USDT: 0.001
+      ETH/USDT: 0.01
+      BNB/USDT: 0.01
+      XRP/USDT: 1.0
+
+  kucoin:
+    api_key: ${KUCOIN_API_KEY}
+    api_secret: ${KUCOIN_API_SECRET}
+    passphrase: ${KUCOIN_PASSPHRASE}
+    testnet: false
+    trading_pairs:
+      - BTC/USDT
+      - ETH/USDT
+      - XRP/USDT
+      - DOGE/USDT
+    api_key: ""  # Set via environment variable KUCOIN_API_KEY
+    api_secret: ""  # Set via environment variable KUCOIN_API_SECRET
+    api_passphrase: ""  # Set via environment variable KUCOIN_API_PASSPHRASE
+    testnet: true
+    trading_pairs: *trading_pairs  # Reuse the same pairs as Binance
+    timeframes: *timeframes  # Reuse the same timeframes as Binance
+    rate_limits:
+      requests_per_minute: 600
+      orders_per_minute: 45
+      order_count_per_10s: 40
+      order_count_per_day: 200000
+
+  bybit:
+    api_key: ""  # Set via environment variable BYBIT_API_KEY
+    api_secret: ""  # Set via environment variable BYBIT_API_SECRET
+    testnet: true
+    trading_pairs: *trading_pairs  # Reuse the same pairs as Binance
+    timeframes: *timeframes  # Reuse the same timeframes as Binance
+    rate_limits:
+      requests_per_minute: 600
+      orders_per_minute: 10
+      order_count_per_10s: 50
+      order_count_per_day: 100000
+
+  # Default settings for all exchanges
+  default_settings:
+    retry_attempts: 3
+    retry_delay: 1  # seconds
+    connection_timeout: 10  # seconds
+    read_timeout: 30  # seconds
+    use_proxy: false
+    proxy_settings:
+      http: ""
+      https: ""

@@ -1,0 +1,19 @@
+# Service des modèles ML
+FROM trading-base-python:latest
+
+# Installation des dépendances ML
+COPY requirements/models.txt /tmp/requirements/
+RUN pip install --no-cache-dir -r /tmp/requirements/models.txt
+
+# Copie du code source
+COPY trading/core/models /app/trading/core/models
+COPY trading/services/models /app/trading/services/models
+COPY trading/utils /app/trading/utils
+
+# Configuration TensorBoard
+EXPOSE 6006
+
+WORKDIR /app
+
+# Démarrage de TensorBoard et du service des modèles
+CMD ["sh", "-c", "tensorboard --logdir=/app/logs --host=0.0.0.0 & python -m trading.core.models.model_manager"]

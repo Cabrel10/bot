@@ -1,0 +1,66 @@
+version: '3.8'
+
+x-resource-policy: &resource-policy
+  restart: unless-stopped
+  healthcheck:
+    interval: 30s
+    timeout: 10s
+    retries: 3
+
+services:
+  data-service:
+    <<: *resource-policy
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '${DATA_SERVICE_CPU_LIMIT:-0.50}'
+          memory: '${DATA_SERVICE_MEM_LIMIT:-1G}'
+        reservations:
+          cpus: '${DATA_SERVICE_CPU_RESERVE:-0.25}'
+          memory: '${DATA_SERVICE_MEM_RESERVE:-512M}'
+
+  models-service:
+    <<: *resource-policy
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '${MODELS_SERVICE_CPU_LIMIT:-2.0}'
+          memory: '${MODELS_SERVICE_MEM_LIMIT:-4G}'
+        reservations:
+          cpus: '${MODELS_SERVICE_CPU_RESERVE:-1.0}'
+          memory: '${MODELS_SERVICE_MEM_RESERVE:-2G}'
+
+  execution-service:
+    <<: *resource-policy
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '${EXECUTION_SERVICE_CPU_LIMIT:-1.0}'
+          memory: '${EXECUTION_SERVICE_MEM_LIMIT:-2G}'
+        reservations:
+          cpus: '${EXECUTION_SERVICE_CPU_RESERVE:-0.5}'
+          memory: '${EXECUTION_SERVICE_MEM_RESERVE:-1G}'

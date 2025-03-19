@@ -1,0 +1,21 @@
+# Utilisation de l'image de base
+FROM trading-base:latest
+
+# Installation des dépendances de développement
+COPY requirements/dev.txt /tmp/requirements/
+RUN pip install --no-cache-dir -r /tmp/requirements/dev.txt
+
+# Configuration pour le développement
+ENV FLASK_ENV=development \
+    FLASK_DEBUG=1
+
+# Installation de nodemon pour le rechargement automatique
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g nodemon
+
+# Script de démarrage pour le développement
+COPY scripts/start-dev.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start-dev.sh
+
+CMD ["start-dev.sh"]

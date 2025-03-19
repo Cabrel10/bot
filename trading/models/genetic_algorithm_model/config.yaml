@@ -1,0 +1,148 @@
+# Configuration de l'algorithme génétique pour le trading
+version: "1.0.0"
+
+# Paramètres de la population
+population:
+  size: 100  # Taille de la population
+  initialization:
+    method: "random"  # random, uniform, normal
+    value_ranges:
+      min_value: -1.0
+      max_value: 1.0
+    constraints:
+      enforce_sum: true  # Somme des poids = 1
+      allow_negative: false  # Positions short autorisées
+
+# Structure du chromosome
+chromosome:
+  encoding: "real"  # real, binary, or mixed
+  gene_structure:
+    - name: "entry_weights"  # Poids des signaux d'entrée
+      length: 10
+      type: "float"
+      range: [-1.0, 1.0]
+    
+    - name: "exit_weights"  # Poids des signaux de sortie
+      length: 10
+      type: "float"
+      range: [-1.0, 1.0]
+    
+    - name: "timeframe_weights"  # Poids des différents timeframes
+      length: 5
+      type: "float"
+      range: [0.0, 1.0]
+    
+    - name: "risk_params"  # Paramètres de gestion du risque
+      length: 3
+      type: "float"
+      range: [0.0, 1.0]
+
+# Opérateurs génétiques
+operators:
+  selection:
+    method: "tournament"  # tournament, roulette, rank
+    tournament_size: 3
+    elitism: 2  # Nombre d'individus élites préservés
+  
+  crossover:
+    probability: 0.8
+    methods:
+      - name: "uniform"
+        weight: 0.4
+      - name: "single_point"
+        weight: 0.3
+      - name: "arithmetic"
+        weight: 0.3
+  
+  mutation:
+    probability: 0.2
+    methods:
+      - name: "gaussian"
+        weight: 0.5
+        params:
+          mean: 0.0
+          std: 0.1
+      - name: "uniform"
+        weight: 0.3
+      - name: "swap"
+        weight: 0.2
+
+# Fonction de fitness
+fitness:
+  metrics:
+    - name: "sharpe_ratio"
+      weight: 0.4
+    - name: "max_drawdown"
+      weight: 0.2
+    - name: "profit_factor"
+      weight: 0.2
+    - name: "win_rate"
+      weight: 0.1
+    - name: "consistency"
+      weight: 0.1
+  
+  constraints:
+    max_drawdown:
+      threshold: 0.2
+      penalty: 1000
+    min_trades:
+      threshold: 50
+      penalty: 500
+
+# Paramètres d'évolution
+evolution:
+  max_generations: 100
+  convergence_criteria:
+    min_improvement: 0.001
+    patience: 10  # Générations sans amélioration
+  
+  adaptive_rates:
+    enabled: true
+    mutation:
+      min_rate: 0.1
+      max_rate: 0.4
+    crossover:
+      min_rate: 0.6
+      max_rate: 0.9
+
+# Paramètres de trading
+trading:
+  timeframes: ["1h", "4h", "1d"]
+  position_sizing:
+    method: "risk_parity"  # fixed, kelly, risk_parity
+    max_position: 0.2  # % du capital
+  
+  risk_management:
+    stop_loss: true
+    take_profit: true
+    trailing_stop: true
+    position_timeout: 48  # heures
+
+# Backtesting
+backtesting:
+  windows: [30, 60, 90]  # Jours
+  metrics_calculation:
+    rolling_window: 20
+    min_trades: 30
+  
+  validation:
+    out_of_sample: true
+    walk_forward: true
+    monte_carlo: 1000
+
+# Sauvegarde et logging
+persistence:
+  save_frequency: 10  # Générations
+  save_format: "pickle"
+  version_control: true
+  
+  checkpoints:
+    enabled: true
+    frequency: 5
+    max_keep: 3
+
+# Parallélisation
+parallel_processing:
+  enabled: true
+  max_workers: 4
+  batch_size: 20

@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  # Image de base Python
+  base-python:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.base.python
+    image: trading-base-python:latest
+
+  # Service de données
+  data-service:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.data
+    depends_on:
+      - base-python
+      - redis
+    volumes:
+      - ../trading:/app/trading
+      - ../data:/app/data
+    environment:
+      - REDIS_HOST=redis
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.socket().connect(('redis', 6379))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service des modèles
+  models-service:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.models
+    depends_on:
+      - base-python
+      - data-service
+    ports:
+      - "6006:6006"  # TensorBoard
+    volumes:
+      - ../trading:/app/trading
+      - model_data:/app/models
+      - ../logs:/app/logs
+    environment:
+      - PYTHONPATH=/app
+      - TF_FORCE_GPU_ALLOW_GROWTH=true
+      - OMP_NUM_THREADS=4
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import tensorflow as tf; tf.random.uniform([1])"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service d'exécution
+  execution-service:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.execution
+    depends_on:
+      - base-python
+      - data-service
+      - models-service
+    ports:
+      - "8051:8051"
+    volumes:
+      - ../trading:/app/trading
+      - ../config:/app/config
+    environment:
+      - PYTHONPATH=/app
+      - TRADING_MODE=paper
+      - REDIS_HOST=redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8051/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis pour le cache et la communication
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana pour le monitoring
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../monitoring/grafana:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel,grafana-worldmap-panel
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--tries=1", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Service de monitoring
+  monitoring-service:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.monitoring
+    depends_on:
+      - grafana
+      - redis
+    ports:
+      - "9090:9090"  # Prometheus
+    volumes:
+      - ../trading:/app/trading
+      - monitoring_data:/app/monitoring
+    environment:
+      - PYTHONPATH=/app
+      - PROMETHEUS_RETENTION_TIME=15d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--tries=1", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis_data:
+  grafana_data:
+  model_data:
+  monitoring_data:

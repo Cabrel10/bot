@@ -1,0 +1,289 @@
+# Configuration du réseau de neurones pour le trading algorithmique
+# ======================================================
+# Ce fichier définit l'architecture et les paramètres d'entraînement
+# du réseau de neurones utilisé pour la prédiction des mouvements de marché.
+# Il inclut des configurations pour le prétraitement des données, l'architecture
+# du réseau, l'optimisation et la validation.
+
+# Architecture du réseau
+# --------------------
+architecture:
+  # Type de modèle
+  type: "hybrid"  # hybrid, cnn, lstm, tcn
+  
+  # Configuration des couches d'entrée
+  input_layers:
+    # Données OHLCV
+    ohlcv:
+      window_size: 100  # Taille de la fenêtre temporelle
+      features: ["open", "high", "low", "close", "volume"]
+      normalization: "min_max"  # min_max, standard, robust
+    
+    # Indicateurs techniques
+    technical:
+      enabled: true
+      indicators:
+        - name: "RSI"
+          params: {period: 14}
+        - name: "MACD"
+          params: {fast: 12, slow: 26, signal: 9}
+        - name: "BB"
+          params: {period: 20, std_dev: 2}
+    
+    # Données de volume
+    volume:
+      enabled: true
+      features:
+        - name: "VWAP"
+          params: {window: 24}
+        - name: "OBV"
+          params: {}
+        - name: "Volume_MA"
+          params: {period: 20, type: "ema"}
+    
+    # Données de marché futures
+    futures:
+      enabled: true
+      features:
+        - name: "funding_rate"
+          params: {ma_period: 8}
+        - name: "open_interest"
+          params: {change_period: 24}
+        - name: "basis"
+          params: {spot_reference: true}
+
+  # Couches cachées
+  hidden_layers:
+    # Couche TCN (Temporal Convolutional Network)
+    tcn:
+      enabled: true
+      params:
+        nb_filters: 64
+        kernel_size: 3
+        nb_stacks: 2
+        dilations: [1, 2, 4, 8, 16]
+        padding: "causal"
+        use_skip_connections: true
+        dropout_rate: 0.1
+        return_sequences: false
+    
+    # Couches LSTM
+    lstm:
+      enabled: true
+      units: [128, 64]
+      dropout: 0.2
+      recurrent_dropout: 0.1
+      bidirectional: true
+    
+    # Couches d'attention
+    attention:
+      enabled: true
+      type: "self"  # self, multi_head
+      num_heads: 4
+      key_dim: 32
+    
+    # Couches denses
+    dense:
+      units: [256, 128, 64]
+      activation: "relu"
+      kernel_regularizer:
+        l1: 0.01
+        l2: 0.01
+
+  # Couche de sortie
+  output_layer:
+    units: 3  # -1 (vente), 0 (neutre), 1 (achat)
+    activation: "softmax"
+
+# Configuration de l'entraînement
+# -----------------------------
+training:
+  # Paramètres d'optimisation
+  optimizer:
+    name: "adam"
+    learning_rate:
+      initial: 0.001
+      decay:
+        type: "exponential"
+        rate: 0.95
+        steps: 1000
+    beta_1: 0.9
+    beta_2: 0.999
+    epsilon: 1e-07
+  
+  # Fonction de perte
+  loss:
+    type: "categorical_crossentropy"
+    class_weights:
+      enabled: true
+      method: "balanced"  # balanced, custom
+  
+  # Métriques
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "auc"
+  
+  # Callbacks
+  callbacks:
+    early_stopping:
+      enabled: true
+      monitor: "val_loss"
+      patience: 10
+      min_delta: 0.001
+    
+    model_checkpoint:
+      enabled: true
+      monitor: "val_f1_score"
+      save_best_only: true
+    
+    reduce_lr:
+      enabled: true
+      monitor: "val_loss"
+      factor: 0.5
+      patience: 5
+    
+    tensorboard:
+      enabled: true
+      update_freq: "epoch"
+
+# Configuration des données
+# ----------------------
+data:
+  # Prétraitement
+  preprocessing:
+    # Gestion des valeurs manquantes
+    missing_values:
+      method: "forward_fill"
+      max_gap: 5
+    
+    # Normalisation
+    normalization:
+      method: "min_max"
+      feature_range: [-1, 1]
+    
+    # Augmentation des données
+    augmentation:
+      enabled: true
+      methods:
+        - name: "time_warp"
+          probability: 0.3
+        - name: "jittering"
+          probability: 0.2
+  
+  # Validation croisée temporelle
+  time_series_split:
+    enabled: true
+    n_splits: 5
+    test_size: 0.2
+    gap: 100  # Écart entre train et test en périodes
+  
+  # Échantillonnage
+  sampling:
+    # Gestion du déséquilibre des classes
+    class_balance:
+      method: "SMOTE"
+      k_neighbors: 5
+    
+    # Fenêtres glissantes
+    sliding_window:
+      size: 100
+      stride: 1
+      shuffle: false
+
+# Configuration spécifique aux futures
+# ---------------------------------
+futures_specific:
+  # Couche de gestion du levier
+  leverage_layer:
+    enabled: true
+    max_leverage: 5
+    num_levels: 10
+    activation: "sigmoid"
+  
+  # Entrées de taux de financement
+  funding_rate:
+    input_features:
+      - "current_rate"
+      - "predicted_rate"
+      - "historical_mean"
+      - "volatility"
+    lookback_window: 30
+  
+  # Gestion des risques
+  risk_management:
+    margin_call_threshold: 0.8
+    max_position_value: 100000
+    position_sizing:
+      method: "kelly"
+      fraction: 0.5
+
+# Validation et monitoring
+# ----------------------
+validation:
+  # Validation des hyperparamètres
+  hyperparameter_validation:
+    enabled: true
+    method: "bayesian"  # grid, random, bayesian
+    max_trials: 100
+    num_folds: 5
+  
+  # Validation du modèle
+  model_validation:
+    # Tests de robustesse
+    robustness:
+      noise_injection:
+        enabled: true
+        std: 0.01
+      
+      adversarial:
+        enabled: true
+        method: "fgsm"
+        epsilon: 0.1
+    
+    # Tests de performance
+    performance:
+      backtest:
+        periods: ["1d", "1w", "1m"]
+        metrics: ["sharpe", "sortino", "calmar"]
+      
+      benchmark:
+        models: ["random_forest", "xgboost"]
+        metrics: ["accuracy", "f1_score"]
+
+# Journalisation et monitoring
+# -------------------------
+monitoring:
+  # Métriques à suivre
+  metrics:
+    - name: "loss"
+      frequency: "batch"
+    - name: "accuracy"
+      frequency: "epoch"
+    - name: "gradient_norm"
+      frequency: "batch"
+  
+  # Alertes
+  alerts:
+    gradient_explosion:
+      enabled: true
+      threshold: 100
+    
+    vanishing_gradient:
+      enabled: true
+      threshold: 1e-7
+    
+    nan_detection:
+      enabled: true
+  
+  # Visualisation
+  visualization:
+    enabled: true
+    plots:
+      - "loss_curve"
+      - "accuracy_curve"
+      - "confusion_matrix"
+      - "feature_importance"
+    update_frequency: 100  # batches 

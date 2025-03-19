@@ -1,0 +1,92 @@
+# Configuration du tableau de bord de trading
+dashboard:
+  # Configuration du serveur
+  port: 8050
+  host: "0.0.0.0"
+  debug: false
+  data_update_interval: 5
+  theme: "dark"
+  max_data_points: 10000
+
+  # Configuration des visualisations d'entraînement
+  training_visualization:
+    neural_metrics:
+      - loss
+      - val_loss
+      - accuracy
+      - val_accuracy
+      - precision
+      - recall
+      - f1_score
+    update_interval: 1
+    batch_size_display: 32
+    show_layer_info: true
+    
+    genetic_metrics:
+      - best_fitness
+      - average_fitness
+      - population_diversity
+      - mutation_rate
+      - crossover_rate
+    generation_interval: 1
+    population_size_display: 100
+
+  # Configuration des visualisations de backtest
+  backtest_visualization:
+    performance_charts:
+      - cumulative_returns
+      - drawdown
+      - trade_distribution
+      - monthly_returns
+      - risk_adjusted_returns
+      - correlation_matrix
+    
+    trading_metrics:
+      - total_return
+      - sharpe_ratio
+      - sortino_ratio
+      - max_drawdown
+      - win_rate
+      - profit_factor
+      - average_trade
+      - risk_reward_ratio
+      - expectancy
+      - recovery_factor
+
+  # Configuration des visualisations en temps réel
+  realtime_visualization:
+    market_charts:
+      - candlestick
+      - volume
+      - depth_chart
+      - order_book
+      - trade_flow
+    update_frequency: 1
+    max_candles_display: 200
+    show_indicators: true
+    indicators_overlay:
+      - moving_averages
+      - bollinger_bands
+      - rsi
+      - macd
+
+  # Alertes et notifications
+  alerts:
+    enabled: true
+    channels:
+      - email
+      - telegram
+    priority_levels:
+      - critical
+      - warning
+      - info
+    max_alerts_per_hour: 20
+
+  # Configuration de l'export des données
+  export:
+    formats:
+      - csv
+      - json
+      - excel
+    auto_export: true
+    export_interval: 3600  # Secondes

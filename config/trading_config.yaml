@@ -1,0 +1,127 @@
+# Configuration du trading
+
+# Configuration générale
+general:
+  mode: "backtest"  # backtest, paper_trading, live
+  base_currency: "USDT"
+  quote_currency: "BTC"
+  timeframe: "1h"  # 1m, 5m, 15m, 1h, 4h, 1d
+  max_positions: 5
+  max_leverage: 1.0
+  min_balance: 100.0
+  max_daily_trades: 10
+  max_daily_loss: 0.05  # 5% du capital
+  max_drawdown: 0.2  # 20% du capital
+
+# Configuration des ordres
+orders:
+  order_type: "market"  # market, limit, stop
+  slippage_tolerance: 0.001  # 0.1%
+  min_order_size: 0.001
+  max_order_size: 1.0
+  price_precision: 8
+  size_precision: 8
+  retry_attempts: 3
+  retry_delay: 1  # secondes
+  cancel_timeout: 30  # secondes
+
+# Configuration de la gestion des positions
+position_management:
+  stop_loss: 0.02  # 2%
+  take_profit: 0.04  # 4%
+  trailing_stop: 0.01  # 1%
+  trailing_step: 0.005  # 0.5%
+  partial_take_profit: true
+  partial_take_profit_levels: [0.02, 0.03, 0.04]  # 2%, 3%, 4%
+  partial_take_profit_sizes: [0.3, 0.3, 0.4]  # 30%, 30%, 40%
+  position_sizing: "risk_based"  # risk_based, fixed, kelly
+  risk_per_trade: 0.01  # 1% du capital
+  max_position_size: 0.1  # 10% du capital
+
+# Configuration de la gestion des risques
+risk_management:
+  max_daily_loss: 0.05  # 5% du capital
+  max_drawdown: 0.2  # 20% du capital
+  max_leverage: 1.0
+  min_balance: 100.0
+  max_positions: 5
+  position_correlation_threshold: 0.7
+  market_volatility_threshold: 0.03  # 3%
+  liquidity_threshold: 1000.0
+  spread_threshold: 0.001  # 0.1%
+
+# Configuration des indicateurs techniques
+technical_indicators:
+  rsi:
+    period: 14
+    overbought: 70
+    oversold: 30
+  macd:
+    fast_period: 12
+    slow_period: 26
+    signal_period: 9
+  bollinger_bands:
+    period: 20
+    std_dev: 2
+  moving_averages:
+    sma: [20, 50, 200]
+    ema: [9, 21, 50]
+  volume_indicators:
+    obv: true
+    vwap: true
+    volume_profile: true
+
+# Configuration des filtres de marché
+market_filters:
+  min_volume: 1000.0
+  min_price: 0.00001
+  max_price: 100000.0
+  min_market_cap: 1000000.0
+  min_24h_volume: 500000.0
+  min_liquidity: 1000.0
+  max_spread: 0.001  # 0.1%
+  min_trades_24h: 1000
+  volatility_threshold: 0.03  # 3%
+
+# Configuration des notifications
+notifications:
+  enabled: true
+  channels:
+    - type: "telegram"
+      chat_id: "YOUR_CHAT_ID"
+      bot_token: "YOUR_BOT_TOKEN"
+    - type: "email"
+      address: "your@email.com"
+      smtp_server: "smtp.gmail.com"
+      smtp_port: 587
+      username: "your@email.com"
+      password: "YOUR_PASSWORD"
+  events:
+    - type: "trade"
+      level: "info"
+    - type: "error"
+      level: "error"
+    - type: "warning"
+      level: "warning"
+    - type: "performance"
+      level: "info"
+      frequency: "daily"
+
+# Configuration du journaling
+journaling:
+  enabled: true
+  log_level: "INFO"
+  log_file: "trading.log"
+  max_file_size: 10485760  # 10MB
+  max_files: 5
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  events:
+    - type: "trade"
+      level: "info"
+    - type: "error"
+      level: "error"
+    - type: "warning"
+      level: "warning"
+    - type: "performance"
+      level: "info"
+      frequency: "daily"

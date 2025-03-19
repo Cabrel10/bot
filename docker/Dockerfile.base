@@ -1,0 +1,55 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    gcc \
+    g++ \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure pip to use a longer timeout and alternative mirrors
+RUN pip config set global.timeout 1000 \
+    && pip config set global.index-url https://pypi.org/simple
+
+# Install base packages first
+RUN pip install --no-cache-dir --default-timeout=1000 \
+    numpy \
+    scipy \
+    pandas \
+    scikit-learn
+
+# Install SHAP and its dependencies
+RUN pip install --no-cache-dir --default-timeout=1000 \
+    numba \
+    llvmlite \
+    shap==0.41.0
+
+# Install remaining packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir --default-timeout=1000 -r requirements.txt
+
+# Disable TensorFlow warnings and configure memory limits
+ENV TF_CPP_MIN_LOG_LEVEL=2
+ENV TF_ENABLE_ONEDNN_OPTS=0
+ENV PYTHONUNBUFFERED=1
+
+# Set memory limits for TensorBoard and MLflow
+ENV TENSORBOARD_MAX_MEMORY=2G
+ENV MLFLOW_MAX_MEMORY=2G
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/logs/neural_network \
+    /app/data \
+    /app/models \
+    /app/.secret
+
+EXPOSE 8051
+
+CMD ["python", "-m", "trading.visualization.dashboard.main_dashboard"]

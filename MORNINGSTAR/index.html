@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet MORNINGSTAR | Web3</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js pour les visualisations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Web3.js pour l'interaction blockchain -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.2/dist/web3.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>MORNING<span>STAR</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#vision">Vision</a></li>
+                    <li><a href="#roadmap">Roadmap</a></li>
+                    <li><a href="#features">Technologie</a></li>
+                    <li><a href="contribute.html">Contribuer</a></li>
+                    <li><a href="invest.html">Investir</a></li>
+                </ul>
+            </nav>
+            <div class="wallet-connect">
+                <button id="connectWallet" class="btn-connect">Connecter Wallet</button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span id="walletAddress">Non connecté</span>
+                    <div class="network-status" id="networkStatus"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>L'avenir du trading algorithmique</h2>
+            <p class="subtitle">Combinaison révolutionnaire de réseaux neuronaux convolutifs (CNN), d'algorithmes génétiques (GNA) et de transparence blockchain</p>
+            <div class="cta-container">
+                <button class="btn-primary" id="learnMoreBtn">Découvrir la technologie</button>
+                <button class="btn-secondary" id="whitepaperBtn">Whitepaper</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="vision" class="vision">
+        <div class="container">
+            <h3>Notre vision</h3>
+            <div class="vision-container">
+                <div class="vision-text">
+                    <p class="vision-lead">MORNINGSTAR vise à révolutionner le trading algorithmique en combinant intelligence artificielle avancée et transparence blockchain.</p>
+                    <p>Notre objectif est de créer un système hybride qui surpasse les approches traditionnelles grâce à l'apprentissage profond et aux algorithmes génétiques, tout en offrant une transparence sans précédent dans le secteur.</p>
+                    <p>Nous croyons que la combinaison de l'IA auto-apprenante et de la blockchain représente l'avenir du trading algorithmique.</p>
+                </div>
+                <div class="vision-image">
+                    <img src="assets/images/vision-illustration.svg" alt="Illustration de la vision MORNINGSTAR">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <h3>Roadmap 2025</h3>
+            <div class="roadmap-visual">
+                <div class="roadmap-line"></div>
+                <div class="roadmap-milestones">
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>Q1 2025</h4>
+                            <div class="milestone-title">Développement initial</div>
+                            <ul>
+                                <li>Conception des architectures CNN</li>
+                                <li>Implémentation des algorithmes génétiques</li>
+                                <li>Premiers tests sur données historiques</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>Q2 2025</h4>
+                            <div class="milestone-title">Optimisation et intégration</div>
+                            <ul>
+                                <li>Optimisation des modèles CNN-GNA</li>
+                                <li>Intégration de la blockchain</li>
+                                <li>Tests en environnement simulé</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>Q3 2025</h4>
+                            <div class="milestone-title">Version Bêta</div>
+                            <ul>
+                                <li>Lancement de la version bêta</li>
+                                <li>Ouverture aux premiers utilisateurs</li>
+                                <li>Ajustements basés sur les retours</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-dot"></div>
+                        <div class="milestone-content">
+                            <h4>Q4 2025</h4>
+                            <div class="milestone-title">Lancement officiel</div>
+                            <ul>
+                                <li>Déploiement complet</li>
+                                <li>Ouverture au grand public</li>
+                                <li>Expansion des actifs supportés</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h3>Notre technologie hybride</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h4>Réseaux de neurones convolutifs</h4>
+                    <p>Analyse avancée des patterns de marché et identification des opportunités via des modèles CNN optimisés</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧬</div>
+                    <h4>Algorithmes génétiques</h4>
+                    <p>Optimisation continue des stratégies et adaptation dynamique aux conditions de marché</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⛓️</div>
+                    <h4>Transparence blockchain</h4>
+                    <p>Enregistrement immuable des performances et transactions vérifiables en temps réel</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="join-project">
+        <div class="container">
+            <h3>Rejoignez le projet</h3>
+            <div class="join-cards">
+                <div class="join-card">
+                    <h4>Contribuer</h4>
+                    <p>Nous recherchons des experts en ML/IA, analyse de marché, développement et infrastructure</p>
+                    <a href="contribute.html" class="btn-secondary">Découvrir les opportunités</a>
+                </div>
+                <div class="join-card">
+                    <h4>Investir</h4>
+                    <p>Devenez partenaire de l'avenir du trading algorithmique et bénéficiez de notre technologie révolutionnaire</p>
+                    <a href="invest.html" class="btn-primary">Opportunités d'investissement</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="live-metrics">
+        <div class="container">
+            <h3>Performances en temps réel</h3>
+            <div class="metrics-container">
+                <div class="metric-box">
+                    <h4>ROI 30 jours</h4>
+                    <div class="metric-value" id="roi30d">--</div>
+                </div>
+                <div class="metric-box">
+                    <h4>Win Rate</h4>
+                    <div class="metric-value" id="winRate">--</div>
+                </div>
+                <div class="metric-box">
+                    <h4>Sharpe Ratio</h4>
+                    <div class="metric-value" id="sharpRatio">--</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section class="blockchain-verify">
+        <div class="container">
+            <h3>Vérification Blockchain</h3>
+            <p>Tous nos résultats sont enregistrés sur la blockchain pour une transparence totale</p>
+            <div class="verify-container">
+                <div class="contract-address">
+                    <h4>Contrat Smart</h4>
+                    <code id="contractAddress">0x123...abc</code>
+                    <button class="btn-small" id="viewContractBtn">Voir sur Etherscan</button>
+                </div>
+                <div class="blockchain-actions">
+                    <button class="btn-action" id="verifyResultsBtn">Vérifier résultats</button>
+                    <div id="verificationResult" class="verification-result hidden">
+                        <p>Résultats vérifiés avec succès!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="asset-coverage">
+        <div class="container">
+            <h3>Actifs couverts</h3>
+            <div class="assets-grid">
+                <div class="asset-item" data-symbol="BTC">
+                    <img src="assets/images/btc.svg" alt="Bitcoin" class="asset-logo">
+                    <span class="asset-name">Bitcoin</span>
+                </div>
+                <div class="asset-item" data-symbol="ETH">
+                    <img src="assets/images/eth.svg" alt="Ethereum" class="asset-logo">
+                    <span class="asset-name">Ethereum</span>
+                </div>
+                <div class="asset-item" data-symbol="BNB">
+                    <img src="assets/images/bnb.svg" alt="Binance Coin" class="asset-logo">
+                    <span class="asset-name">BNB</span>
+                </div>
+                <div class="asset-item" data-symbol="XRP">
+                    <img src="assets/images/xrp.svg" alt="XRP" class="asset-logo">
+                    <span class="asset-name">XRP</span>
+                </div>
+                <div class="asset-item" data-symbol="SOL">
+                    <img src="assets/images/sol.svg" alt="Solana" class="asset-logo">
+                    <span class="asset-name">Solana</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>MORNING<span>STAR</span></h3>
+                </div>
+                <div class="footer-links">
+                    <ul>
+                        <li><a href="#vision">Vision</a></li>
+                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="contribute.html">Contribuer</a></li>
+                        <li><a href="invest.html">Investir</a></li>
+                        <li><a href="whitepaper.html">Whitepaper</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-icon">Twitter</a>
+                    <a href="#" class="social-icon">Discord</a>
+                    <a href="#" class="social-icon">GitHub</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Projet MORNINGSTAR. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeWalletModal">&times;</span>
+            <h3>Connexion Wallet</h3>
+            <div class="wallet-options">
+                <button class="wallet-option" id="metamaskBtn">
+                    <img src="assets/images/metamask.svg" alt="MetaMask">
+                    <span>MetaMask</span>
+                </button>
+                <button class="wallet-option" id="walletConnectBtn">
+                    <img src="assets/images/walletconnect.svg" alt="WalletConnect">
+                    <span>WalletConnect</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/web3.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+/* Styles pour le site MORNINGSTAR */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F4F4F4;
+}
+header {
+    background: linear-gradient(to right, #0F4C81, #00A8E8);
+    color: #FFFFFF;
+    padding: 20px 0;
+    text-align: center;
+}
+header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    background: linear-gradient(to right, #00A8E8, #FF6B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+header p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+a {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.btn-connect {
+    background-color: #FF6B6B;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn-connect:hover {
+    background-color: #00A8E8;
+}
+.cta-button {
+    background-color: #FF6B6B;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.cta-button:hover {
+    background-color: #00A8E8;
+    transform: scale(1.05);
+}
+main {
+    padding: 20px;
+}
+.hero {
+    position: relative;
+    text-align: center;
+    color: white;
+    background: linear-gradient(to right, #0F4C81, #00A8E8);
+    padding: 50px 20px;
+}
+.hero h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+.hero p {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+.features {
+    margin-top: 20px;
+}
+.features-grid {
+    display: flex;
+    justify-content: space-around;
+}
+.feature-card {
+    text-align: center;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.live-metrics {
+    margin-top: 40px;
+}
+.metrics-container {
+    display: flex;
+    justify-content: space-around;
+}
+.metric-box {
+    text-align: center;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.blockchain-verify {
+    margin-top: 40px;
+}
+.verify-container {
+    display: flex;
+    justify-content: space-between;
+}
+.asset-coverage {
+    margin-top: 40px;
+}
+.assets-grid {
+    display: flex;
+    justify-content: space-around;
+}
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #0F4C81;
+    color: #FFFFFF;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+.social-links {
+    margin-top: 10px;
+}
+.social-links a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+.social-links a:hover {
+    color: #FF6B6B;
+}
+
+/* Styles pour les animations d'apparition progressive */
+section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

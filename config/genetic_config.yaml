@@ -1,0 +1,203 @@
+# Configuration de l'algorithme génétique pour l'optimisation des stratégies de trading
+# ================================================================================
+# Ce fichier définit les paramètres de l'algorithme génétique utilisé pour optimiser
+# les stratégies de trading. Il inclut des paramètres pour la gestion des populations,
+# la sélection, les opérateurs génétiques, et les métriques d'évaluation.
+
+# Configuration de la population
+# ----------------------------
+population:
+  # Taille de la population (doit être un entier positif pair)
+  size: 100
+  
+  # Nombre maximal de générations (doit être un entier positif)
+  max_generations: 50
+  
+  # Critère d'arrêt basé sur la convergence
+  convergence:
+    # Nombre de générations sans amélioration avant l'arrêt
+    max_stagnation: 10
+    # Seuil minimal d'amélioration relative entre générations
+    min_improvement: 0.001
+
+# Opérateurs génétiques
+# --------------------
+mutation:
+  # Taux de mutation (doit être compris entre 0 et 1)
+  rate: 0.1
+  
+  # Types de mutations et leurs probabilités relatives
+  types:
+    # Mutation gaussienne pour les paramètres continus
+    gaussian:
+      enabled: true
+      std_dev: 0.1  # Écart-type de la distribution gaussienne
+    
+    # Mutation uniforme pour les paramètres discrets
+    uniform:
+      enabled: true
+      range: [-0.5, 0.5]  # Plage de variation relative
+
+crossover:
+  # Taux de croisement (doit être compris entre 0 et 1)
+  rate: 0.8
+  
+  # Types de croisements et leurs probabilités relatives
+  types:
+    # Croisement à un point
+    single_point:
+      weight: 0.3
+    
+    # Croisement à deux points
+    two_point:
+      weight: 0.3
+    
+    # Croisement uniforme
+    uniform:
+      weight: 0.4
+
+# Sélection
+# ---------
+selection:
+  # Méthode de sélection des parents
+  method: "tournament"
+  
+  # Paramètres spécifiques à la méthode de sélection
+  tournament:
+    size: 3  # Taille du tournoi (doit être ≥ 2)
+  
+  # Élitisme : nombre d'individus préservés entre générations
+  elitism: 2
+
+# Métriques de fitness
+# -------------------
+fitness:
+  # Métriques principales
+  metrics:
+    # Ratio de Sharpe annualisé
+    # Formule : (Rendement moyen - Taux sans risque) / Écart-type des rendements
+    sharpe_ratio:
+      weight: 0.4
+      min_threshold: 1.0  # Ratio minimum acceptable
+      risk_free_rate: 0.02  # Taux sans risque annuel
+    
+    # Maximum drawdown
+    # Formule : (Plus bas - Plus haut) / Plus haut
+    max_drawdown:
+      weight: 0.3
+      max_threshold: 0.2  # Drawdown maximum acceptable
+    
+    # Ratio de gain
+    win_rate:
+      weight: 0.3
+      min_threshold: 0.5  # Ratio minimum acceptable
+
+  # Pénalités
+  penalties:
+    # Pénalité pour le nombre de trades excessif
+    excessive_trading:
+      enabled: true
+      threshold: 100  # Nombre de trades par jour
+      penalty: 0.1  # Réduction du score de fitness
+    
+    # Pénalité pour la complexité de la stratégie
+    complexity:
+      enabled: true
+      max_params: 20  # Nombre maximum de paramètres
+      penalty: 0.05  # Réduction par paramètre supplémentaire
+
+# Configuration spécifique aux futures
+# ----------------------------------
+futures:
+  enabled: true
+  
+  # Paramètres de levier
+  leverage:
+    max: 5.0  # Levier maximum autorisé
+    optimization:
+      enabled: true  # Optimiser le levier
+      min: 1.0
+      max: 3.0
+      step: 0.5
+  
+  # Gestion des frais de financement
+  funding:
+    consideration: true  # Prendre en compte les frais de financement
+    weight: 0.2  # Poids dans le calcul du fitness
+    threshold: 0.001  # Seuil de tolérance pour les frais
+  
+  # Gestion de la marge
+  margin:
+    type: "isolated"  # isolated ou cross
+    requirement: 0.1  # Exigence de marge (10%)
+    maintenance: 0.075  # Marge de maintenance (7.5%)
+
+# Indicateurs de volume
+# -------------------
+volume:
+  enabled: true
+  
+  # Moyenne mobile de volume
+  moving_average:
+    periods: [20, 50, 200]
+    type: "sma"  # sma ou ema
+  
+  # VWAP (Volume-Weighted Average Price)
+  vwap:
+    enabled: true
+    reset_period: "daily"  # daily ou session
+  
+  # Détection des anomalies de volume
+  anomaly:
+    enabled: true
+    threshold: 2.0  # Multiplicateur de l'écart-type
+    lookback: 20  # Période d'observation
+  
+  # Profil de volume
+  profile:
+    enabled: true
+    num_bins: 20  # Nombre de niveaux de prix
+    min_volume_threshold: 0.1  # Volume minimum relatif
+
+# Validation et contraintes
+# -----------------------
+validation:
+  # Contraintes sur les paramètres
+  constraints:
+    # Vérification des types de données
+    type_checking: true
+    
+    # Vérification des plages de valeurs
+    range_checking: true
+    
+    # Vérification de la cohérence des paramètres
+    consistency_checking: true
+  
+  # Règles de validation personnalisées
+  custom_rules:
+    # Les périodes courtes doivent être inférieures aux périodes longues
+    period_ordering: true
+    
+    # Les seuils de risque doivent être cohérents
+    risk_thresholds: true
+    
+    # Les poids des métriques doivent somme à 1
+    weight_sum: true
+
+# Journalisation et suivi
+# ----------------------
+logging:
+  level: "INFO"
+  
+  # Métriques à enregistrer
+  metrics:
+    - "best_fitness"
+    - "population_diversity"
+    - "convergence_rate"
+    - "execution_time"
+  
+  # Fréquence de sauvegarde
+  save_frequency: 5  # Sauvegarder tous les 5 générations
+  
+  # Format du fichier de log
+  format: "%(asctime)s - %(levelname)s - %(message)s" 

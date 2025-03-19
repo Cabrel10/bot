@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investir dans MORNINGSTAR | Web3</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js pour les visualisations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>MORNING<span>STAR</span></h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="index.html#vision">Vision</a></li>
+                    <li><a href="index.html#roadmap">Roadmap</a></li>
+                    <li><a href="index.html#features">Technologie</a></li>
+                    <li><a href="contribute.html">Contribuer</a></li>
+                    <li><a href="invest.html" class="active">Investir</a></li>
+                </ul>
+            </nav>
+            <div class="wallet-connect">
+                <button id="connectWallet" class="btn-connect">Connecter Wallet</button>
+                <div id="walletInfo" class="wallet-info hidden">
+                    <span id="walletAddress">Non connecté</span>
+                    <div class="network-status" id="networkStatus"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h2>Investir dans MORNINGSTAR</h2>
+            <p class="subtitle">Rejoignez l'avenir du trading algorithmique basé sur l'IA et la blockchain</p>
+        </div>
+    </section>
+
+    <section class="investment-overview">
+        <div class="container">
+            <h3>Notre proposition de valeur</h3>
+            <div class="value-proposition">
+                <div class="proposition-image">
+                <img src="images/investment-graph.svg" alt="Graphique de croissance d'investissement">
+                </div>
+                <div class="proposition-text">
+                    <p>MORNINGSTAR offre une opportunité unique d'investissement dans le secteur émergent de la finance décentralisée pilotée par l'IA. Notre plateforme combine :</p>
+                    <ul>
+                        <li>Des algorithmes d'IA avancés pour l'analyse prédictive des marchés</li>
+                        <li>Une exécution des transactions sécurisée par blockchain</li>
+                        <li>Une gouvernance décentralisée via notre token MSTN</li>
+                        <li>Des rendements compétitifs validés par des tests approfondis</li>
+                    </ul>
+                    <p>Nous visons à démocratiser l'accès à des stratégies de trading sophistiquées tout en offrant une transparence totale sur nos opérations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="token-economics">
+        <div class="container">
+            <h3>Économie du token MSTN</h3>
+            <div class="token-info-grid">
+                <div class="token-info-card">
+                    <h4>Distribution initiale</h4>
+                    <div class="chart-container">
+                        <canvas id="tokenDistributionChart"></canvas>
+                    </div>
+                    <div class="token-data">
+                        <p>Supply total: <strong>100,000,000 MSTN</strong></p>
+                        <p>Prix initial: <strong>0.50 USD</strong></p>
+                    </div>
+                </div>
+                <div class="token-info-card">
+                    <h4>Utilité du token</h4>
+                    <ul class="token-utility-list">
+                        <li><span class="icon">🔒</span> Accès à la plateforme de trading</li>
+                        <li><span class="icon">🗳️</span> Droits de vote sur la gouvernance</li>
+                        <li><span class="icon">💹</span> Partage des revenus générés</li>
+                        <li><span class="icon">🔄</span> Staking pour des récompenses supplémentaires</li>
+                    </ul>
+                </div>
+                <div class="token-info-card">
+                    <h4>Mécanisme de valorisation</h4>
+                    <p>Le token MSTN est conçu pour apprécier sa valeur à mesure que :</p>
+                    <ul>
+                        <li>La plateforme attire plus d'utilisateurs et de capital</li>
+                        <li>Les performances des algorithmes s'améliorent</li>
+                        <li>Les revenus générés augmentent</li>
+                        <li>La demande pour les services de MORNINGSTAR croît</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="investment-options">
+        <div class="container">
+            <h3>Options d'investissement</h3>
+            <div class="investment-tiers">
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h4>Standard</h4>
+                        <p class="tier-price">5,000 - 25,000 MSTN</p>
+                    </div>
+                    <div class="tier-benefits">
+                        <ul>
+                            <li>Accès à la plateforme de base</li>
+                            <li>Droits de vote proportionnels</li>
+                            <li>Partage des revenus trimestriels</li>
+                        </ul>
+                    </div>
+                    <button class="btn-invest">Investir maintenant</button>
+                </div>
+                <div class="tier-card featured">
+                    <div class="tier-header">
+                        <h4>Premium</h4>
+                        <p class="tier-price">25,000 - 100,000 MSTN</p>
+                    </div>
+                    <div class="tier-benefits">
+                        <ul>
+                            <li>Tous les avantages Standard</li>
+                            <li>Accès prioritaire aux nouvelles fonctionnalités</li>
+                            <li>Récompenses de staking bonifiées</li>
+                            <li>Rapports d'analyse mensuels</li>
+                        </ul>
+                    </div>
+                    <button class="btn-invest">Investir maintenant</button>
+                </div>
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h4>Partenaire</h4>
+                        <p class="tier-price">100,000+ MSTN</p>
+                    </div>
+                    <div class="tier-benefits">
+                        <ul>
+                            <li>Tous les avantages Premium</li>
+                            <li>Accès à l'équipe de développement</li>
+                            <li>Participation aux décisions stratégiques</li>
+                            <li>Opportunités d'investissement exclusives</li>
+                        </ul>
+                    </div>
+                    <button class="btn-invest">Contacter l'équipe</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="investment-process">
+        <div class="container">
+            <h3>Comment investir</h3>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Connectez votre wallet</h4>
+                    <p>Utilisez MetaMask, Trust Wallet ou tout autre portefeuille Web3 compatible pour vous connecter à notre plateforme.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Choisissez votre niveau d'investissement</h4>
+                    <p>Sélectionnez le montant de tokens MSTN que vous souhaitez acquérir selon vos objectifs.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Confirmez la transaction</h4>
+                    <p>Approuvez la transaction dans votre portefeuille pour acquérir vos tokens MSTN.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Activez vos avantages</h4>
+                    <p>Accédez à votre tableau de bord pour commencer à utiliser les fonctionnalités correspondant à votre niveau d'investissement.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <h3>Questions fréquentes</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>Quels sont les risques associés à l'investissement dans MORNINGSTAR?</h4>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Comme tout investissement dans la crypto-économie, il existe des risques liés à la volatilité du marché, l'évolution réglementaire et la maturité technologique. Nous recommandons de n'investir que le capital que vous pouvez vous permettre de risquer. Notre équipe travaille activement à minimiser ces risques grâce à des audits rigoureux, une gestion prudente et une transparence totale.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>Comment puis-je retirer mon investissement?</h4>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Les tokens MSTN sont des actifs numériques négociables sur les places de marché décentralisées compatibles avec notre blockchain. Vous pouvez à tout moment échanger vos tokens contre d'autres cryptomonnaies ou les vendre contre des monnaies fiduciaires via les échanges partenaires. Un préavis de 7 jours est requis pour les retraits importants afin de maintenir la stabilité du protocole.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <h4>Quelle est la performance historique des algorithmes de MORNINGSTAR?</h4>
+                        <span class="accordion-icon">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Nos algorithmes ont été testés sur des données historiques remontant à 5 ans et ont démontré une performance supérieure de 18% par rapport aux indices de référence. Depuis notre lancement bêta il y a 6 mois, nous avons atteint une performance réelle de +12% malgré des conditions de marché difficiles. Tous les résultats sont auditables via notre interface de transparence accessible aux détenteurs de tokens.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h3>Prêt à faire partie de l'avenir du trading algorithmique?</h3>
+            <p>Les opportunités d'investissement à ce stade précoce sont limitées. Rejoignez-nous maintenant pour maximiser vos avantages.</p>
+            <div class="cta-buttons">
+                <button class="btn-invest-large">Investir maintenant</button>
+                <button class="btn-schedule">Planifier un appel avec notre équipe</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>MORNING<span>STAR</span></h2>
+                    <p>Finance décentralisée propulsée par l'IA</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><a href="index.html#vision">Vision</a></li>
+                            <li><a href="index.html#roadmap">Roadmap</a></li>
+                            <li><a href="index.html#features">Technologie</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Ressources</h4>
+                        <ul>
+                            <li><a href="#">Livre blanc</a></li>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Tutoriels</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Légal</h4>
+                        <ul>
+                            <li><a href="#">Conditions d'utilisation</a></li>
+                            <li><a href="#">Politique de confidentialité</a></li>
+                            <li><a href="#">Avis de risque</a></li>
+                            <li><a href="#">Conformité</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <h4>Rejoignez notre communauté</h4>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><img src="images/icons/twitter.svg" alt="Twitter"></a>
+                        <a href="#" class="social-icon"><img src="images/icons/telegram.svg" alt="Telegram"></a>
+                        <a href="#" class="social-icon"><img src="images/icons/discord.svg" alt="Discord"></a>
+                        <a href="#" class="social-icon"><img src="images/icons/github.svg" alt="GitHub"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MORNINGSTAR. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Javascript pour les fonctionnalités interactives -->
+    <script src="js/wallet-connect.js"></script>
+    <script src="js/accordion.js"></script>
+    <script>
+        // Script pour le graphique de distribution des tokens
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('tokenDistributionChart').getContext('2d');
+            const tokenDistributionChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Vente publique', 'Équipe', 'Réserve', 'Partenariats', 'Récompenses communauté'],
+                    datasets: [{
+                        data: [40, 20, 15, 15, 10],
+                        backgroundColor: [
+                            '#4F46E5', '#7C3AED', '#2563EB', '#0EA5E9', '#06B6D4'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Inter, sans-serif',
+                                    size: 12
+                                },
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

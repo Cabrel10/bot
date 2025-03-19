@@ -1,0 +1,17 @@
+# Service d'exécution des trades
+FROM trading-base-python:latest
+
+# Installation des dépendances spécifiques
+RUN pip install --no-cache-dir \
+    python-binance==1.0.15 \
+    websocket-client==1.2.0 \
+    prometheus-client==0.14.1
+
+# Copie du code source
+COPY trading/services/execution /app/trading/services/execution
+COPY trading/utils /app/trading/utils
+
+# Configuration du service
+EXPOSE 8051
+
+CMD ["python", "-m", "trading.services.execution.execution_engine"]
